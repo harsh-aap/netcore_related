@@ -50,9 +50,6 @@ func ReadCSV(jobs chan<- Contact) error {
 		jobs <- contact
 		rowNum++
 
-		if rowNum == 10 {
-			break
-		}
 	}
 
 	log.Println("✅ Finished reading CSV")

@@ -21,14 +21,14 @@ type PendingUpdate struct {
 var (
 	CreateQueue = make(chan Contact, 500)
 	UpdateQueue = make(chan PendingUpdate, 500)
-	FlushTimeout = 60 * time.Second
+	FlushTimeout = 120 * time.Second
 )
 
 // ─────────────────────────────────────────────
 // Config
 // ─────────────────────────────────────────────
 const (
-	BatchSize = 2
+	BatchSize = 500
 )
 
 // ─────────────────────────────────────────────

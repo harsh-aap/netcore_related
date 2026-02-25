@@ -9,14 +9,15 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 var httpClient = &http.Client{
 	Timeout: 15 * time.Second,
 }
+
+var searchMu sync.Mutex
 
 /*
 	 =========================
@@ -89,6 +90,12 @@ type SearchResponse struct {
 }
 
 func SearchContactAPI(ctx context.Context, phone string) (bool, string, error) {
+
+	searchMu.Lock()
+	defer searchMu.Unlock()
+
+	time.Sleep(1 * time.Second)
+
 	log.Println("🔍 Starting search for contact with phone:", phone)
 
 	// Build request body
@@ -264,7 +271,7 @@ func BulkCreateAPI(ctx context.Context, contacts []Contact) error {
 	for _, c := range contacts {
 		entry := map[string]interface{}{
 			"mobile":   c.Phone,
-			"identity": uuid.New().String(),
+			"identity": c.Phone,
 		}
 		attrs := buildAttributes(c)
 		if len(attrs) > 0 {
